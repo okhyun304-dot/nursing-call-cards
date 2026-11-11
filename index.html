@@ -8,14 +8,20 @@
   :root{--navy:#1f2d45;--ink:#14171c;--sub:#545b66;--mute:#8b919a;--line:#e3e6ea;--bg:#f4f5f7;--soft:#eef1f5}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Pretendard,'Malgun Gothic',sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
-  header{position:sticky;top:0;z-index:5;background:var(--navy);color:#fff;padding:14px 16px}
+  #top{position:sticky;top:0;z-index:5}
+  .bar{display:flex;gap:6px;padding:8px 16px;background:#fff;border-bottom:1px solid var(--line)}
+  .bar input{flex:1;min-width:0;font:inherit;font-size:15px;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  .bar select{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:8px;padding:8px;background:#fff}
+  #cnt{font-size:12px;color:var(--mute);padding:4px 16px 0;background:#fff}
+  .mail{display:block;margin-top:8px;text-align:center;font-size:15px;font-weight:700;color:var(--navy);text-decoration:none;border:1px solid var(--navy);border-radius:10px;padding:9px;word-break:break-all}
+  header{background:var(--navy);color:#fff;padding:14px 16px}
   header h1{font-size:17px;font-weight:800}
   header p{font-size:12.5px;color:#c9d1de;margin-top:2px}
-  nav{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:58px;z-index:4}
+  nav{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line)}
   nav a{flex:none;font-size:13px;font-weight:700;color:var(--navy);background:var(--soft);border-radius:20px;padding:6px 11px;text-decoration:none;white-space:nowrap}
   nav a.done{background:var(--navy);color:#fff}
   main{max-width:640px;margin:0 auto;padding:14px 14px 60px}
-  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;margin-bottom:16px;scroll-margin-top:110px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;margin-bottom:16px;scroll-margin-top:190px}
   .card.top{border:2px solid var(--navy)}
   .rank{display:inline-block;font-size:11.5px;font-weight:800;color:#fff;background:var(--navy);border-radius:4px;padding:2px 7px}
   .card:not(.top) .rank{background:var(--mute)}
@@ -49,17 +55,22 @@
   .export{display:block;width:100%;margin:6px 0 20px;font:inherit;font-size:15px;font-weight:800;border:0;border-radius:10px;padding:13px;background:#fff;color:var(--navy);border:1px solid var(--navy)}
 </style></head>
 <body>
+<div id="top">
 <header><h1>요양원 영업 카드 · 50곳</h1><p>A등급 일반 요양원 · 2026-11-10~11 조사 · 위에서부터 차례로 전화</p></header>
+<div class="bar"><input id="q" type="search" placeholder="시설명·지역·원장·전화·이메일 검색"><select id="f"><option value="">전체</option><option value="todo">아직 안 건 곳</option><option value="done">통화 기록 있음</option></select></div>
+<div id="cnt"></div>
 <nav><a href="#c1" data-id="14163000321">1. 솔가람요양원</a><a href="#c2" data-id="14165000425">2. 효심요양원</a><a href="#c3" data-id="14115001085">3. 의정부재활요양원</a><a href="#c4" data-id="14163000543">4. 온누리요양원</a><a href="#c5" data-id="11153000459">5. 엠지새롬재활요양원</a><a href="#c6" data-id="14136001329">6. 더100세요양원</a><a href="#c7" data-id="14125000006">7. 신흥신망애요양원</a><a href="#c8" data-id="14163000583">8. 아름다운 메디컬 요양원</a><a href="#c9" data-id="14125000064">9. 동원 효 실버센터</a><a href="#c10" data-id="14165000368">10. 늘샘요양원</a><a href="#c11" data-id="11135000020">11. 영기노인요양원</a><a href="#c12" data-id="14163000015">12. 양주노블케어</a><a href="#c13" data-id="11123000435">13. 오월의숲요양원</a><a href="#c14" data-id="14163000605">14. 행복한요양원 녹양역점</a><a href="#c15" data-id="14136000610">15. 성심사랑요양원</a><a href="#c16" data-id="14163000554">16. 효자재활요양원</a><a href="#c17" data-id="14165000483">17. 어울림요양원</a><a href="#c18" data-id="14136000669">18. 더엘케어</a><a href="#c19" data-id="14163000565">19. 양주보금자리요양원</a><a href="#c20" data-id="14163000596">20. 포레스트 재활 실버케어</a><a href="#c21" data-id="14163000523">21. 더편한요양원</a><a href="#c22" data-id="14163000377">22. 다올건강실버케어</a><a href="#c23" data-id="11165000238">23. 서초시니어타운</a><a href="#c24" data-id="14163000570">24. 기쁨요양원</a><a href="#c25" data-id="11153000453">25. 위드온빌리지</a><a href="#c26" data-id="14163000606">26. 골드필드요양원</a><a href="#c27" data-id="14163000610">27. 바라봄요양원</a><a href="#c28" data-id="14163000408">28. 해오름요양원</a><a href="#c29" data-id="14163000573">29. 라온요양원</a><a href="#c30" data-id="14115001071">30. 늘푸른요양원</a><a href="#c31" data-id="14136000014">31. 아람노인요양시설</a><a href="#c32" data-id="14165000440">32. 안다미로요양원</a><a href="#c33" data-id="14136000450">33. 늘소망요양원</a><a href="#c34" data-id="14125000247">34. 늘사랑노인전문요양원</a><a href="#c35" data-id="14136001349">35. 광릉숲힐링요양원</a><a href="#c36" data-id="14163000628">36. 센트럴 재활 요양원</a><a href="#c37" data-id="14165000443">37. 정혜요양원</a><a href="#c38" data-id="14163000609">38. 보아스의 집</a><a href="#c39" data-id="14165000283">39. 더 편한 요양원</a><a href="#c40" data-id="14165000346">40. 진달래요양원</a><a href="#c41" data-id="14136000498">41. 휴안채요양원</a><a href="#c42" data-id="14125000121">42. 현대전문요양원</a><a href="#c43" data-id="14115001040">43. 우리집 실버 요양원</a><a href="#c44" data-id="14165000463">44. 축석요양원</a><a href="#c45" data-id="11130500476">45. 요양원 온담</a><a href="#c46" data-id="14136001287">46. 늘함께요양원</a><a href="#c47" data-id="11138000535">47. 은평숲요양원</a><a href="#c48" data-id="14165000439">48. 벧엘실버요양원</a><a href="#c49" data-id="14165000435">49. 천사마을요양원</a><a href="#c50" data-id="11132000630">50. 파미유요양원</a></nav>
+</div>
 <main>
 
-<article class="card top" id="c1" data-id="14163000321">
+<article class="card top" id="c1" data-id="14163000321" data-q="솔가람요양원 양주시 미확인 경기도 양주시 장흥면 가마골로 246-35 (장흥면) 031-878-8833 smartlove1004@naver.com">
   <div class="head">
     <div class="rank">먼저 1</div>
     <h2>솔가람요양원</h2>
     <div class="meta">양주시 · 기존시설·공실 후보 · 지정 2019.02.25</div>
   </div>
   <a class="call" href="tel:0318788833">📞 031-878-8833</a>
+  <a class="mail" href="mailto:smartlove1004@naver.com">✉ smartlove1004@naver.com</a>
   <div class="nums">
     <div><b>62</b><span>추정 빈자리</span></div>
     <div><b>87</b><span>정원</span></div>
@@ -93,13 +104,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card top" id="c2" data-id="14165000425">
+<article class="card top" id="c2" data-id="14165000425" data-q="효심요양원 포천시 최중희 원장(경기i저널 2026-11-01 인터뷰 기사, 시설 공식 채널 아님) 경기도 포천시 내촌면 금강로 2527 (내촌면) 031-536-5100 ">
   <div class="head">
     <div class="rank">먼저 2</div>
     <h2>효심요양원</h2>
     <div class="meta">포천시 · 기존시설·공실 후보 · 지정 2024.10.01</div>
   </div>
   <a class="call" href="tel:0315365100">📞 031-536-5100</a>
+  
   <div class="nums">
     <div><b>54</b><span>추정 빈자리</span></div>
     <div><b>83</b><span>정원</span></div>
@@ -133,13 +145,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card top" id="c3" data-id="14115001085">
+<article class="card top" id="c3" data-id="14115001085" data-q="의정부재활요양원 의정부시 윤태권(홈페이지 하단 &#x27;대표자&#x27;) · 인사말엔 원장 이름 없음 경기도 의정부시 용민로 198 6, 7층 (민락동) 031-853-6677 21c-lead@hanmail.net">
   <div class="head">
     <div class="rank">먼저 3</div>
     <h2>의정부재활요양원</h2>
     <div class="meta">의정부시 · 지정 2년 이내 후보 · 지정 2026.10.01</div>
   </div>
   <a class="call" href="tel:0318536677">📞 031-853-6677</a>
+  <a class="mail" href="mailto:21c-lead@hanmail.net">✉ 21c-lead@hanmail.net</a>
   <div class="nums">
     <div><b>96</b><span>추정 빈자리</span></div>
     <div><b>125</b><span>정원</span></div>
@@ -173,13 +186,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card top" id="c4" data-id="14163000543">
+<article class="card top" id="c4" data-id="14163000543" data-q="온누리요양원 양주시 이슬기(홈페이지 하단 &#x27;대표자&#x27;) 경기도 양주시 장흥면 가마골로 246-54 (장흥면) 031-877-7711 onnuri272@naver.com">
   <div class="head">
     <div class="rank">먼저 4</div>
     <h2>온누리요양원</h2>
     <div class="meta">양주시 · 기존시설·공실 후보 · 지정 2024.08.01</div>
   </div>
   <a class="call" href="tel:0318777711">📞 031-877-7711</a>
+  <a class="mail" href="mailto:onnuri272@naver.com">✉ onnuri272@naver.com</a>
   <div class="nums">
     <div><b>51</b><span>추정 빈자리</span></div>
     <div><b>99</b><span>정원</span></div>
@@ -213,13 +227,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card top" id="c5" data-id="11153000459">
+<article class="card top" id="c5" data-id="11153000459" data-q="엠지새롬재활요양원 구로구 민혁근(홈페이지 인사말 &#x27;대표이사&#x27;) 서울특별시 구로구 경인로19길 37-7 (오류동) 02-1899-2685 mgsrcare@naver.com">
   <div class="head">
     <div class="rank">먼저 5</div>
     <h2>엠지새롬재활요양원</h2>
     <div class="meta">구로구 · 지정 2년 이내 후보 · 지정 2026.08.01</div>
   </div>
   <a class="call" href="tel:18992685">📞 1899-2685</a>
+  <a class="mail" href="mailto:mgsrcare@naver.com">✉ mgsrcare@naver.com</a>
   <div class="nums">
     <div><b>48</b><span>추정 빈자리</span></div>
     <div><b>90</b><span>정원</span></div>
@@ -253,13 +268,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c6" data-id="14136001329">
+<article class="card" id="c6" data-id="14136001329" data-q="더100세요양원 남양주시 이재학 원장(홈페이지 인사말) · 대표 권오극(홈페이지 하단) 경기도 남양주시 진접읍 금강로1521번길 22-5 (진접읍) 031-555-7700 ">
   <div class="head">
     <div class="rank">다음</div>
     <h2>더100세요양원</h2>
     <div class="meta">남양주시 · 지정 2년 이내 후보 · 지정 2026.08.01</div>
   </div>
   <a class="call" href="tel:0315557700">📞 031-555-7700</a>
+  
   <div class="nums">
     <div><b>63</b><span>추정 빈자리</span></div>
     <div><b>99</b><span>정원</span></div>
@@ -293,13 +309,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c7" data-id="14125000006">
+<article class="card" id="c7" data-id="14125000006" data-q="신흥신망애요양원 동두천시 미확인 경기도 동두천시 강변로702번길 13-11 (동두천동) 031-861-5500 flovehope@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>신흥신망애요양원</h2>
     <div class="meta">동두천시 · 기존시설·공실 후보 · 지정 2008.06.12</div>
   </div>
   <a class="call" href="tel:0318615500">📞 031-861-5500</a>
+  <a class="mail" href="mailto:flovehope@naver.com">✉ flovehope@naver.com</a>
   <div class="nums">
     <div><b>58</b><span>추정 빈자리</span></div>
     <div><b>90</b><span>정원</span></div>
@@ -333,13 +350,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c8" data-id="14163000583">
+<article class="card" id="c8" data-id="14163000583" data-q="아름다운 메디컬 요양원 양주시 미확인 경기도 양주시 장흥면 가마골로 232-21 (장흥면) 031-874-0999 medical23221@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>아름다운 메디컬 요양원</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2025.10.13</div>
   </div>
   <a class="call" href="tel:0318740999">📞 031-874-0999</a>
+  <a class="mail" href="mailto:medical23221@naver.com">✉ medical23221@naver.com</a>
   <div class="nums">
     <div><b>51</b><span>추정 빈자리</span></div>
     <div><b>173</b><span>정원</span></div>
@@ -373,13 +391,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c9" data-id="14125000064">
+<article class="card" id="c9" data-id="14125000064" data-q="동원 효 실버센터 동두천시 미확인 경기도 동두천시 삼육사로 1144 (생연동) 031-861-9900 dwhyo9900@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>동원 효 실버센터</h2>
     <div class="meta">동두천시 · 기존시설·공실 후보 · 지정 2010.02.12</div>
   </div>
   <a class="call" href="tel:0318619900">📞 031-861-9900</a>
+  <a class="mail" href="mailto:dwhyo9900@naver.com">✉ dwhyo9900@naver.com</a>
   <div class="nums">
     <div><b>49</b><span>추정 빈자리</span></div>
     <div><b>85</b><span>정원</span></div>
@@ -413,13 +432,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c10" data-id="14165000368">
+<article class="card" id="c10" data-id="14165000368" data-q="늘샘요양원 포천시 미확인 경기도 포천시 소흘읍 죽엽산로 502-36 (소흘읍) 031-541-9119 nscare24@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>늘샘요양원</h2>
     <div class="meta">포천시 · 기존시설·공실 후보 · 지정 2022.05.01</div>
   </div>
   <a class="call" href="tel:0315419119">📞 031-541-9119</a>
+  <a class="mail" href="mailto:nscare24@naver.com">✉ nscare24@naver.com</a>
   <div class="nums">
     <div><b>42</b><span>추정 빈자리</span></div>
     <div><b>82</b><span>정원</span></div>
@@ -453,13 +473,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c11" data-id="11135000020">
+<article class="card" id="c11" data-id="11135000020" data-q="영기노인요양원 노원구 미확인 서울특별시 노원구 동일로248길 30 (상계동) 02-939-8111 youngki05@hanmail.net">
   <div class="head">
     <div class="rank">다음</div>
     <h2>영기노인요양원</h2>
     <div class="meta">노원구 · 기존시설·공실 후보 · 지정 2008.06.10</div>
   </div>
   <a class="call" href="tel:029398111">📞 02-939-8111</a>
+  <a class="mail" href="mailto:youngki05@hanmail.net">✉ youngki05@hanmail.net</a>
   <div class="nums">
     <div><b>41</b><span>추정 빈자리</span></div>
     <div><b>83</b><span>정원</span></div>
@@ -493,13 +514,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c12" data-id="14163000015">
+<article class="card" id="c12" data-id="14163000015" data-q="양주노블케어 양주시 박설(홈페이지 하단 &#x27;대표&#x27;) · 원장 이름은 미확인 경기도 양주시 은현면 화합로969번길 185-105 (은현면) 031-866-0288 pss0728@hanmail.net">
   <div class="head">
     <div class="rank">다음</div>
     <h2>양주노블케어</h2>
     <div class="meta">양주시 · 기존시설·공실 후보 · 지정 2008.06.30</div>
   </div>
   <a class="call" href="tel:0318660288">📞 031-866-0288</a>
+  <a class="mail" href="mailto:pss0728@hanmail.net">✉ pss0728@hanmail.net</a>
   <div class="nums">
     <div><b>40</b><span>추정 빈자리</span></div>
     <div><b>72</b><span>정원</span></div>
@@ -533,13 +555,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c13" data-id="11123000435">
+<article class="card" id="c13" data-id="11123000435" data-q="오월의숲요양원 동대문구 박민우 대표(홈페이지 인사말·하단 &#x27;대표&#x27;, 한양대 의대 졸·신경외과 전문의·현 꿈의숲요양병원 병원장 약력) · 별도 원장 이름 없음 서울특별시 동대문구 한천로 207 (전농동) 02-6349-9988 ">
   <div class="head">
     <div class="rank">다음</div>
     <h2>오월의숲요양원</h2>
     <div class="meta">동대문구 · 지정 2년 이내 후보 · 지정 2026.04.23</div>
   </div>
   <a class="call" href="tel:0263499988">📞 02-6349-9988</a>
+  
   <div class="nums">
     <div><b>38</b><span>추정 빈자리</span></div>
     <div><b>130</b><span>정원</span></div>
@@ -573,13 +596,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c14" data-id="14163000605">
+<article class="card" id="c14" data-id="14163000605" data-q="행복한요양원 녹양역점 양주시 대표 박준호(홈페이지 하단 사업자 정보) · 원장 이름은 미확인 경기도 양주시 외미로20번길 34 (남방동) 031-856-8090 purusol1004@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>행복한요양원 녹양역점</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2026.04.01</div>
   </div>
   <a class="call" href="tel:0318568090">📞 031-856-8090</a>
+  <a class="mail" href="mailto:Purusol1004@naver.com">✉ Purusol1004@naver.com</a>
   <div class="nums">
     <div><b>38</b><span>추정 빈자리</span></div>
     <div><b>99</b><span>정원</span></div>
@@ -613,13 +637,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c15" data-id="14136000610">
+<article class="card" id="c15" data-id="14136000610" data-q="성심사랑요양원 남양주시 미확인 경기도 남양주시 진접읍 금강로1521번길 24 (진접읍) 031-515-2900 ">
   <div class="head">
     <div class="rank">다음</div>
     <h2>성심사랑요양원</h2>
     <div class="meta">남양주시 · 기존시설·공실 후보 · 지정 2016.09.06</div>
   </div>
   <a class="call" href="tel:0315152900">📞 031-515-2900</a>
+  
   <div class="nums">
     <div><b>38</b><span>추정 빈자리</span></div>
     <div><b>80</b><span>정원</span></div>
@@ -653,13 +678,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c16" data-id="14163000554">
+<article class="card" id="c16" data-id="14163000554" data-q="효자재활요양원 양주시 김정연(홈페이지 하단 &#x27;대표자&#x27;) · 원장 이름은 미확인 경기도 양주시 백석읍 기산로440번길 78 (백석읍) 031-871-1566 kjybye@nate.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>효자재활요양원</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2025.02.01</div>
   </div>
   <a class="call" href="tel:0318711566">📞 031-871-1566</a>
+  <a class="mail" href="mailto:kjybye@nate.com">✉ kjybye@nate.com</a>
   <div class="nums">
     <div><b>34</b><span>추정 빈자리</span></div>
     <div><b>49</b><span>정원</span></div>
@@ -693,13 +719,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c17" data-id="14165000483">
+<article class="card" id="c17" data-id="14165000483" data-q="어울림요양원 포천시 미확인 경기도 포천시 화현면 금강로 3645-53 (화현면) 031-532-6939 ">
   <div class="head">
     <div class="rank">다음</div>
     <h2>어울림요양원</h2>
     <div class="meta">포천시 · 지정 2년 이내 후보 · 지정 2026.08.01</div>
   </div>
   <a class="call" href="tel:0315326939">📞 031-532-6939</a>
+  
   <div class="nums">
     <div><b>32</b><span>추정 빈자리</span></div>
     <div><b>49</b><span>정원</span></div>
@@ -733,13 +760,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c18" data-id="14136000669">
+<article class="card" id="c18" data-id="14136000669" data-q="더엘케어 남양주시 미확인(원본 홈페이지 접속 불가, 블로그·플레이스에 이름 없음) 경기도 남양주시 화도읍 북한강로 1397-6 (화도읍) 031-592-6161 onseniorcare@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>더엘케어</h2>
     <div class="meta">남양주시 · 기존시설·공실 후보 · 지정 2017.09.04</div>
   </div>
   <a class="call" href="tel:0315926161">📞 031-592-6161</a>
+  <a class="mail" href="mailto:onseniorcare@naver.com">✉ onseniorcare@naver.com</a>
   <div class="nums">
     <div><b>32</b><span>추정 빈자리</span></div>
     <div><b>70</b><span>정원</span></div>
@@ -773,13 +801,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c19" data-id="14163000565">
+<article class="card" id="c19" data-id="14163000565" data-q="양주보금자리요양원 양주시 미확인 경기도 양주시 백석읍 중앙로223번길 123-21 (백석읍, 양주보금자리요양원) 031-836-7788 moongury@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>양주보금자리요양원</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2025.12.01</div>
   </div>
   <a class="call" href="tel:0318367788">📞 031-836-7788</a>
+  <a class="mail" href="mailto:moongury@naver.com">✉ moongury@naver.com</a>
   <div class="nums">
     <div><b>31</b><span>추정 빈자리</span></div>
     <div><b>79</b><span>정원</span></div>
@@ -813,13 +842,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c20" data-id="14163000596">
+<article class="card" id="c20" data-id="14163000596" data-q="포레스트 재활 실버케어 양주시 미확인 경기도 양주시 장흥면 가마골로147번길 45 (장흥면) 031-872-9988 ">
   <div class="head">
     <div class="rank">다음</div>
     <h2>포레스트 재활 실버케어</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2026.02.01</div>
   </div>
   <a class="call" href="tel:0318729988">📞 031-872-9988</a>
+  
   <div class="nums">
     <div><b>31</b><span>추정 빈자리</span></div>
     <div><b>86</b><span>정원</span></div>
@@ -853,13 +883,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c21" data-id="14163000523">
+<article class="card" id="c21" data-id="14163000523" data-q="더편한요양원 양주시 미확인 경기도 양주시 백석읍 기산로 423-50 (백석읍) 031-871-8180 carefree24@daum.net">
   <div class="head">
     <div class="rank">다음</div>
     <h2>더편한요양원</h2>
     <div class="meta">양주시 · 기존시설·공실 후보 · 지정 2024.04.01</div>
   </div>
   <a class="call" href="tel:0318718180">📞 031-871-8180</a>
+  <a class="mail" href="mailto:carefree24@daum.net">✉ carefree24@daum.net</a>
   <div class="nums">
     <div><b>30</b><span>추정 빈자리</span></div>
     <div><b>49</b><span>정원</span></div>
@@ -893,13 +924,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c22" data-id="14163000377">
+<article class="card" id="c22" data-id="14163000377" data-q="다올건강실버케어 양주시 미확인 경기도 양주시 장흥면 가마골로 246-34 (장흥면, 외 1) 031-826-8800 daal0826@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>다올건강실버케어</h2>
     <div class="meta">양주시 · 기존시설·공실 후보 · 지정 2020.01.02</div>
   </div>
   <a class="call" href="tel:0318268800">📞 031-826-8800</a>
+  <a class="mail" href="mailto:daal0826@naver.com">✉ daal0826@naver.com</a>
   <div class="nums">
     <div><b>28</b><span>추정 빈자리</span></div>
     <div><b>49</b><span>정원</span></div>
@@ -933,13 +965,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c23" data-id="11165000238">
+<article class="card" id="c23" data-id="11165000238" data-q="서초시니어타운 서초구 미확인(운영사는 가능성: 실버킹) 서울특별시 서초구 남부순환로 2271-5 (방배동) 010-3889-1128 ">
   <div class="head">
     <div class="rank">다음</div>
     <h2>서초시니어타운</h2>
     <div class="meta">서초구 · 지정 2년 이내 후보 · 지정 2026.09.01</div>
   </div>
   <a class="call" href="tel:01038891128">📞 010-3889-1128</a>
+  
   <div class="nums">
     <div><b>26</b><span>추정 빈자리</span></div>
     <div><b>49</b><span>정원</span></div>
@@ -973,13 +1006,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c24" data-id="14163000570">
+<article class="card" id="c24" data-id="14163000570" data-q="기쁨요양원 양주시 미확인 경기도 양주시 평화로1429번길 89-22 (덕계동) 031-951-9293 joyrest24h@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>기쁨요양원</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2025.05.01</div>
   </div>
   <a class="call" href="tel:0319519293">📞 031-951-9293</a>
+  <a class="mail" href="mailto:joyrest24h@naver.com">✉ joyrest24h@naver.com</a>
   <div class="nums">
     <div><b>25</b><span>추정 빈자리</span></div>
     <div><b>42</b><span>정원</span></div>
@@ -1013,13 +1047,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c25" data-id="11153000453">
+<article class="card" id="c25" data-id="11153000453" data-q="위드온빌리지 구로구 윤건 대표(홈페이지 인사말·하단 &#x27;대표자&#x27;) 서울특별시 구로구 목동남로 32 b1,2~7층 (고척동) 02-2060-1000 withonvillage@gmail.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>위드온빌리지</h2>
     <div class="meta">구로구 · 지정 2년 이내 후보 · 지정 2026.04.01</div>
   </div>
   <a class="call" href="tel:0220601000">📞 02-2060-1000</a>
+  <a class="mail" href="mailto:withonvillage@gmail.com">✉ withonvillage@gmail.com</a>
   <div class="nums">
     <div><b>24</b><span>추정 빈자리</span></div>
     <div><b>76</b><span>정원</span></div>
@@ -1053,13 +1088,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c26" data-id="14163000606">
+<article class="card" id="c26" data-id="14163000606" data-q="골드필드요양원 양주시 미확인(홈페이지에 이름 없음) 경기도 양주시 고삼로 129-9 (삼숭동) 031-845-5555 goldfieldcare@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>골드필드요양원</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2026.04.01</div>
   </div>
   <a class="call" href="tel:0318455555">📞 031-845-5555</a>
+  <a class="mail" href="mailto:goldfieldcare@naver.com">✉ goldfieldcare@naver.com</a>
   <div class="nums">
     <div><b>23</b><span>추정 빈자리</span></div>
     <div><b>46</b><span>정원</span></div>
@@ -1093,13 +1129,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c27" data-id="14163000610">
+<article class="card" id="c27" data-id="14163000610" data-q="바라봄요양원 양주시 미확인 경기도 양주시 장흥면 가마골로 246-24 (장흥면) 031-877-7807 sshin38@hanmail.net">
   <div class="head">
     <div class="rank">다음</div>
     <h2>바라봄요양원</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2026.06.01</div>
   </div>
   <a class="call" href="tel:0318777807">📞 031-877-7807</a>
+  <a class="mail" href="mailto:sshin38@hanmail.net">✉ sshin38@hanmail.net</a>
   <div class="nums">
     <div><b>22</b><span>추정 빈자리</span></div>
     <div><b>47</b><span>정원</span></div>
@@ -1133,13 +1170,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c28" data-id="14163000408">
+<article class="card" id="c28" data-id="14163000408" data-q="해오름요양원 양주시 이진영(홈페이지 하단 &#x27;대표자&#x27;) · 원장 이름은 확인 못 함 경기도 양주시 백석읍 기산로440번길 91 (백석읍, 해오름요양원) 031-873-2512 sunrise2512@hotmail.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>해오름요양원</h2>
     <div class="meta">양주시 · 기존시설·공실 후보 · 지정 2020.12.01</div>
   </div>
   <a class="call" href="tel:0318732512">📞 031-873-2512</a>
+  <a class="mail" href="mailto:sunrise2512@hotmail.com">✉ sunrise2512@hotmail.com</a>
   <div class="nums">
     <div><b>21</b><span>추정 빈자리</span></div>
     <div><b>38</b><span>정원</span></div>
@@ -1173,13 +1211,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c29" data-id="14163000573">
+<article class="card" id="c29" data-id="14163000573" data-q="라온요양원 양주시 미확인(플레이스에 걸린 홈페이지의 장인수는 부산 북구 라온요양원 시설장이라 이 시설과 다름) 경기도 양주시 고삼로 62-5 (만송동, 라온요양원) 031-842-8400 raon-silvercare@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>라온요양원</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2025.06.01</div>
   </div>
   <a class="call" href="tel:0318428400">📞 031-842-8400</a>
+  <a class="mail" href="mailto:raon-silvercare@naver.com">✉ raon-silvercare@naver.com</a>
   <div class="nums">
     <div><b>20</b><span>추정 빈자리</span></div>
     <div><b>83</b><span>정원</span></div>
@@ -1213,13 +1252,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c30" data-id="14115001071">
+<article class="card" id="c30" data-id="14115001071" data-q="늘푸른요양원 의정부시 미확인 경기도 의정부시 오목로35번길 47-9 (용현동) 031-836-7000 smfvnfms031@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>늘푸른요양원</h2>
     <div class="meta">의정부시 · 지정 2년 이내 후보 · 지정 2026.07.01</div>
   </div>
   <a class="call" href="tel:0318367000">📞 031-836-7000</a>
+  <a class="mail" href="mailto:smfvnfms031@naver.com">✉ smfvnfms031@naver.com</a>
   <div class="nums">
     <div><b>20</b><span>추정 빈자리</span></div>
     <div><b>49</b><span>정원</span></div>
@@ -1253,13 +1293,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c31" data-id="14136000014">
+<article class="card" id="c31" data-id="14136000014" data-q="아람노인요양시설 남양주시 임의재(홈페이지 하단 &#x27;대표&#x27;) · 원장 이름은 미확인 경기도 남양주시 화도읍 비룡로440번길 27-10 (화도읍) 031-591-5444 aram5915444@nate.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>아람노인요양시설</h2>
     <div class="meta">남양주시 · 기존시설·공실 후보 · 지정 2008.06.02</div>
   </div>
   <a class="call" href="tel:0315915444">📞 031-591-5444</a>
+  <a class="mail" href="mailto:aram5915444@nate.com">✉ aram5915444@nate.com</a>
   <div class="nums">
     <div><b>19</b><span>추정 빈자리</span></div>
     <div><b>40</b><span>정원</span></div>
@@ -1293,13 +1334,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c32" data-id="14165000440">
+<article class="card" id="c32" data-id="14165000440" data-q="안다미로요양원 포천시 미확인(블로그에 나온 &#x27;이재선 원장님&#x27;은 이미용 봉사 업체 소속으로 시설 원장 아님) 경기도 포천시 원모루로2길 58 (신읍동) 031-534-1004 pcsilver25@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>안다미로요양원</h2>
     <div class="meta">포천시 · 지정 2년 이내 후보 · 지정 2025.01.01</div>
   </div>
   <a class="call" href="tel:0315341004">📞 031-534-1004</a>
+  <a class="mail" href="mailto:pcsilver25@naver.com">✉ pcsilver25@naver.com</a>
   <div class="nums">
     <div><b>18</b><span>추정 빈자리</span></div>
     <div><b>75</b><span>정원</span></div>
@@ -1333,13 +1375,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c33" data-id="14136000450">
+<article class="card" id="c33" data-id="14136000450" data-q="늘소망요양원 남양주시 박경희(홈페이지 하단 &#x27;대표&#x27;) 경기도 남양주시 수동면 축령산로 272-20 (수동면) 031-559-8263 mdkim59@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>늘소망요양원</h2>
     <div class="meta">남양주시 · 기존시설·공실 후보 · 지정 2014.05.29</div>
   </div>
   <a class="call" href="tel:0315598263">📞 031-559-8263</a>
+  <a class="mail" href="mailto:mdkim59@naver.com">✉ mdkim59@naver.com</a>
   <div class="nums">
     <div><b>18</b><span>추정 빈자리</span></div>
     <div><b>26</b><span>정원</span></div>
@@ -1373,13 +1416,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c34" data-id="14125000247">
+<article class="card" id="c34" data-id="14125000247" data-q="늘사랑노인전문요양원 동두천시 미확인(옛 홈페이지 운영자 이름은 일부 가려져 확인 불가) 경기도 동두천시 동두천로 119 402호 (지행동, 지행역프라자) 031-872-1234 jij5004@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>늘사랑노인전문요양원</h2>
     <div class="meta">동두천시 · 기존시설·공실 후보 · 지정 2021.07.01</div>
   </div>
   <a class="call" href="tel:0318721234">📞 031-872-1234</a>
+  <a class="mail" href="mailto:jij5004@naver.com">✉ jij5004@naver.com</a>
   <div class="nums">
     <div><b>17</b><span>추정 빈자리</span></div>
     <div><b>27</b><span>정원</span></div>
@@ -1413,13 +1457,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c35" data-id="14136001349">
+<article class="card" id="c35" data-id="14136001349" data-q="광릉숲힐링요양원 남양주시 미확인 경기도 남양주시 진접읍 봉현로59번길 29-3 (진접읍) 031-573-3528 foresthealing2026@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>광릉숲힐링요양원</h2>
     <div class="meta">남양주시 · 지정 2년 이내 후보 · 지정 2026.11.01</div>
   </div>
   <a class="call" href="tel:0315733528">📞 031-573-3528</a>
+  <a class="mail" href="mailto:foresthealing2026@naver.com">✉ foresthealing2026@naver.com</a>
   <div class="nums">
     <div><b>16</b><span>추정 빈자리</span></div>
     <div><b>29</b><span>정원</span></div>
@@ -1453,13 +1498,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c36" data-id="14163000628">
+<article class="card" id="c36" data-id="14163000628" data-q="센트럴 재활 요양원 양주시 미확인 경기도 양주시 고삼로 62-9 (만송동) 031-846-9000 ">
   <div class="head">
     <div class="rank">다음</div>
     <h2>센트럴 재활 요양원</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2026.10.01</div>
   </div>
   <a class="call" href="tel:0318469000">📞 031-846-9000</a>
+  
   <div class="nums">
     <div><b>16</b><span>추정 빈자리</span></div>
     <div><b>29</b><span>정원</span></div>
@@ -1493,13 +1539,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c37" data-id="14165000443">
+<article class="card" id="c37" data-id="14165000443" data-q="정혜요양원 포천시 김명순(홈페이지 기관소개·하단 &#x27;대표자&#x27;) · 원장 직함 이름은 미확인 경기도 포천시 군내면 청군로2916번길 18 (군내면) 031-533-5004 jhcare5004@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>정혜요양원</h2>
     <div class="meta">포천시 · 지정 2년 이내 후보 · 지정 2025.04.01</div>
   </div>
   <a class="call" href="tel:0315335004">📞 031-533-5004</a>
+  <a class="mail" href="mailto:jhcare5004@naver.com">✉ jhcare5004@naver.com</a>
   <div class="nums">
     <div><b>16</b><span>추정 빈자리</span></div>
     <div><b>68</b><span>정원</span></div>
@@ -1533,13 +1580,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c38" data-id="14163000609">
+<article class="card" id="c38" data-id="14163000609" data-q="보아스의 집 양주시 미확인(2026-10-12 &#x27;대표자 변경 안내 및 인사말&#x27; 글이 있으나 본문이 이미지라 이름을 못 읽음) 경기도 양주시 장흥면 호국로 95-10 (장흥면) 031-829-9957 boaz9957@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>보아스의 집</h2>
     <div class="meta">양주시 · 지정 2년 이내 후보 · 지정 2026.07.01</div>
   </div>
   <a class="call" href="tel:0318299957">📞 031-829-9957</a>
+  <a class="mail" href="mailto:boaz9957@naver.com">✉ boaz9957@naver.com</a>
   <div class="nums">
     <div><b>15</b><span>추정 빈자리</span></div>
     <div><b>84</b><span>정원</span></div>
@@ -1573,13 +1621,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c39" data-id="14165000283">
+<article class="card" id="c39" data-id="14165000283" data-q="더 편한 요양원 포천시 최성문(홈페이지 하단 &#x27;대표자&#x27;·개인정보관리책임자) 경기도 포천시 영중면 성장로55번길 42 (영중면) 031-532-7865 cozysuan@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>더 편한 요양원</h2>
     <div class="meta">포천시 · 기존시설·공실 후보 · 지정 2018.07.30</div>
   </div>
   <a class="call" href="tel:0315327865">📞 031-532-7865</a>
+  <a class="mail" href="mailto:cozysuan@naver.com">✉ cozysuan@naver.com</a>
   <div class="nums">
     <div><b>15</b><span>추정 빈자리</span></div>
     <div><b>21</b><span>정원</span></div>
@@ -1613,13 +1662,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c40" data-id="14165000346">
+<article class="card" id="c40" data-id="14165000346" data-q="진달래요양원 포천시 미확인 경기도 포천시 신북면 삼성당4길 24-97 (신북면) 031-535-0330 ">
   <div class="head">
     <div class="rank">다음</div>
     <h2>진달래요양원</h2>
     <div class="meta">포천시 · 기존시설·공실 후보 · 지정 2021.06.01</div>
   </div>
   <a class="call" href="tel:0315350330">📞 031-535-0330</a>
+  
   <div class="nums">
     <div><b>15</b><span>추정 빈자리</span></div>
     <div><b>25</b><span>정원</span></div>
@@ -1653,13 +1703,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c41" data-id="14136000498">
+<article class="card" id="c41" data-id="14136000498" data-q="휴안채요양원 남양주시 미확인 경기도 남양주시 금곡로 52 (금곡동) 031-593-5159 hueanchae@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>휴안채요양원</h2>
     <div class="meta">남양주시 · 기존시설·공실 후보 · 지정 2015.04.01</div>
   </div>
   <a class="call" href="tel:0315935159">📞 031-593-5159</a>
+  <a class="mail" href="mailto:hueanchae@naver.com">✉ hueanchae@naver.com</a>
   <div class="nums">
     <div><b>14</b><span>추정 빈자리</span></div>
     <div><b>29</b><span>정원</span></div>
@@ -1693,13 +1744,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c42" data-id="14125000121">
+<article class="card" id="c42" data-id="14125000121" data-q="현대전문요양원 동두천시 미확인 경기도 동두천시 정장로35번길 20 (생연동) 031-862-8286 khg970@hanmail.net">
   <div class="head">
     <div class="rank">다음</div>
     <h2>현대전문요양원</h2>
     <div class="meta">동두천시 · 기존시설·공실 후보 · 지정 2012.06.18</div>
   </div>
   <a class="call" href="tel:0318628286">📞 031-862-8286</a>
+  <a class="mail" href="mailto:khg970@hanmail.net">✉ khg970@hanmail.net</a>
   <div class="nums">
     <div><b>14</b><span>추정 빈자리</span></div>
     <div><b>29</b><span>정원</span></div>
@@ -1733,13 +1785,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c43" data-id="14115001040">
+<article class="card" id="c43" data-id="14115001040" data-q="우리집 실버 요양원 의정부시 미확인 경기도 의정부시 동일로466번길 64 (신곡동) 031-842-5050 mos5050_@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>우리집 실버 요양원</h2>
     <div class="meta">의정부시 · 지정 2년 이내 후보 · 지정 2025.12.01</div>
   </div>
   <a class="call" href="tel:0318425050">📞 031-842-5050</a>
+  <a class="mail" href="mailto:mos5050_@naver.com">✉ mos5050_@naver.com</a>
   <div class="nums">
     <div><b>9</b><span>추정 빈자리</span></div>
     <div><b>43</b><span>정원</span></div>
@@ -1773,13 +1826,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c44" data-id="14165000463">
+<article class="card" id="c44" data-id="14165000463" data-q="축석요양원 포천시 미확인 경기도 포천시 소흘읍 무란길 23-46 (소흘읍) 031-541-9399 ">
   <div class="head">
     <div class="rank">다음</div>
     <h2>축석요양원</h2>
     <div class="meta">포천시 · 지정 2년 이내 후보 · 지정 2025.11.01</div>
   </div>
   <a class="call" href="tel:0315419399">📞 031-541-9399</a>
+  
   <div class="nums">
     <div><b>9</b><span>추정 빈자리</span></div>
     <div><b>49</b><span>정원</span></div>
@@ -1813,13 +1867,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c45" data-id="11130500476">
+<article class="card" id="c45" data-id="11130500476" data-q="요양원 온담 강북구 미확인 서울특별시 강북구 도봉로76길 33 (미아동) 02-6061-9990 ondam90@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>요양원 온담</h2>
     <div class="meta">강북구 · 지정 2년 이내 후보 · 지정 2026.07.01</div>
   </div>
   <a class="call" href="tel:0260619990">📞 02-6061-9990</a>
+  <a class="mail" href="mailto:ondam90@naver.com">✉ ondam90@naver.com</a>
   <div class="nums">
     <div><b>8</b><span>추정 빈자리</span></div>
     <div><b>29</b><span>정원</span></div>
@@ -1853,13 +1908,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c46" data-id="14136001287">
+<article class="card" id="c46" data-id="14136001287" data-q="늘함께요양원 남양주시 미확인 경기도 남양주시 사릉로 14 5층 (금곡동) 031-593-6606 ">
   <div class="head">
     <div class="rank">다음</div>
     <h2>늘함께요양원</h2>
     <div class="meta">남양주시 · 지정 2년 이내 후보 · 지정 2026.03.01</div>
   </div>
   <a class="call" href="tel:0315936606">📞 031-593-6606</a>
+  
   <div class="nums">
     <div><b>7</b><span>추정 빈자리</span></div>
     <div><b>28</b><span>정원</span></div>
@@ -1893,13 +1949,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c47" data-id="11138000535">
+<article class="card" id="c47" data-id="11138000535" data-q="은평숲요양원 은평구 장경란(홈페이지 기관소개·하단 &#x27;대표자&#x27;) · 원장 직함 이름은 미확인 서울특별시 은평구 백련산로4길 23 (응암동) 02-356-0700 beloveas@naver.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>은평숲요양원</h2>
     <div class="meta">은평구 · 지정 2년 이내 후보 · 지정 2026.06.01</div>
   </div>
   <a class="call" href="tel:023560700">📞 02-356-0700</a>
+  <a class="mail" href="mailto:beloveas@naver.com">✉ beloveas@naver.com</a>
   <div class="nums">
     <div><b>7</b><span>추정 빈자리</span></div>
     <div><b>41</b><span>정원</span></div>
@@ -1933,13 +1990,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c48" data-id="14165000439">
+<article class="card" id="c48" data-id="14165000439" data-q="벧엘실버요양원 포천시 이화진(사람인 기업정보 &#x27;대표자명&#x27;, 시설 공식 채널 아님) 경기도 포천시 내촌면 금강로3029번길 3 (내촌면, 벧엘실버요양원) 031-532-4382 bethell1004@gmail.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>벧엘실버요양원</h2>
     <div class="meta">포천시 · 지정 2년 이내 후보 · 지정 2025.01.01</div>
   </div>
   <a class="call" href="tel:0315324382">📞 031-532-4382</a>
+  <a class="mail" href="mailto:bethell1004@gmail.com">✉ bethell1004@gmail.com</a>
   <div class="nums">
     <div><b>6</b><span>추정 빈자리</span></div>
     <div><b>29</b><span>정원</span></div>
@@ -1973,13 +2031,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c49" data-id="14165000435">
+<article class="card" id="c49" data-id="14165000435" data-q="천사마을요양원 포천시 미확인 경기도 포천시 영북면 산정호수로 344 (영북면) 031-534-2886 angleltown344@gmail.com">
   <div class="head">
     <div class="rank">다음</div>
     <h2>천사마을요양원</h2>
     <div class="meta">포천시 · 지정 2년 이내 후보 · 지정 2024.12.01</div>
   </div>
   <a class="call" href="tel:0315342886">📞 031-534-2886</a>
+  <a class="mail" href="mailto:angleltown344@gmail.com">✉ angleltown344@gmail.com</a>
   <div class="nums">
     <div><b>6</b><span>추정 빈자리</span></div>
     <div><b>21</b><span>정원</span></div>
@@ -2013,13 +2072,14 @@
     <textarea placeholder="통화 메모 (이 기기에만 저장)"></textarea>
   </div>
 </article>
-<article class="card" id="c50" data-id="11132000630">
+<article class="card" id="c50" data-id="11132000630" data-q="파미유요양원 도봉구 미확인(외부 블로그 후기에 &#x27;파미유 원장님&#x27; 언급만 있고 이름 없음) 서울특별시 도봉구 시루봉로27가길 11-3 (도봉동) 02-3491-2541 glacia83@hanmail.net">
   <div class="head">
     <div class="rank">다음</div>
     <h2>파미유요양원</h2>
     <div class="meta">도봉구 · 지정 2년 이내 후보 · 지정 2026.05.01</div>
   </div>
   <a class="call" href="tel:0234912541">📞 02-3491-2541</a>
+  <a class="mail" href="mailto:glacia83@hanmail.net">✉ glacia83@hanmail.net</a>
   <div class="nums">
     <div><b>4</b><span>추정 빈자리</span></div>
     <div><b>17</b><span>정원</span></div>
@@ -2064,10 +2124,23 @@ document.querySelectorAll('.card').forEach(c=>{
   const btns=c.querySelectorAll('.st button'), ta=c.querySelector('textarea');
   const paint=()=>{btns.forEach(b=>b.classList.toggle('on',b.dataset.s===rec.s));
     const n=document.querySelector('nav a[data-id="'+id+'"]'); if(n) n.classList.toggle('done',!!rec.s);};
-  btns.forEach(b=>b.onclick=()=>{rec.s=rec.s===b.dataset.s?'':b.dataset.s;rec.t=new Date().toLocaleString('ko-KR');save();paint();});
+  btns.forEach(b=>b.onclick=()=>{rec.s=rec.s===b.dataset.s?'':b.dataset.s;rec.t=new Date().toLocaleString('ko-KR');save();paint();filt();});
   ta.value=rec.m||''; ta.oninput=()=>{rec.m=ta.value;save();};
   paint();
 });
+function filt(){
+  const q=document.getElementById('q').value.trim().toLowerCase(), f=document.getElementById('f').value;
+  let n=0;
+  document.querySelectorAll('.card').forEach(c=>{
+    const r=db[c.dataset.id]||{}, has=!!r.s;
+    const ok=(!q||c.dataset.q.includes(q))&&(f===''||(f==='done'?has:!has));
+    c.style.display=ok?'':'none';
+    const a=document.querySelector('nav a[data-id="'+c.dataset.id+'"]'); if(a) a.style.display=ok?'':'none';
+    if(ok) n++;
+  });
+  document.getElementById('cnt').textContent=n+'곳 표시';
+}
+document.getElementById('q').oninput=filt; document.getElementById('f').onchange=filt; filt();
 document.getElementById('export').onclick=()=>{
   const lines=[...document.querySelectorAll('.card')].map(c=>{const r=db[c.dataset.id]||{};
     return c.querySelector('h2').textContent+' | '+(r.s||'-')+' | '+(r.t||'')+' | '+(r.m||'').replace(/\n/g,' ');});
