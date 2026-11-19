@@ -4,15 +4,13 @@
 <meta name="robots" content="noindex, nofollow">
 <title>동두천 현장방문 11/20</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
-  /* 레이아웃: 휴대폰 한 손 스크롤용 세로 카드 목록. 위에 1호선 노선 띠, 카드마다 역·도보 → 시설 → 숫자 → 이력 → 지도/전화 버튼 */
+  /* 지도 보기(동선 + 핀 누르면 카드) / 목록 보기(기존 세로 카드) 두 화면. 휴대폰 한 손 기준 */
   :root{
     --bg:#f3f5f9; --card:#ffffff; --ink:#151b2b; --sub:#56607a; --mute:#8a93a8; --line:#dde2ec;
     --navy:#1c2b46; --navy-soft:#e6ebf4; --warm:#a3541c; --warm-soft:#fbefe4; --ok:#25603f; --ok-soft:#e5f2ea;
-    --font:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --font:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   }
   @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
     --bg:#0f141f; --card:#182030; --ink:#e9edf5; --sub:#a9b2c7; --mute:#7c869c; --line:#2a3447;
@@ -24,14 +22,62 @@
   *{box-sizing:border-box}
   html,body{margin:0}
   body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55;letter-spacing:-.01em;
-    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 48px}
   .wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:14px;min-width:0;width:100%}
   .wrap > *{min-width:0;max-width:100%}
   a{color:inherit}
-  h1{font-size:22px;font-weight:800;margin:0;text-wrap:balance}
+  h1{font-size:21px;font-weight:800;margin:0;text-wrap:balance}
   .meta{font-size:13px;color:var(--sub);margin:4px 0 0}
 
-  /* 노선 띠 */
+  /* 보기 전환 */
+  .tabs{position:sticky;top:0;z-index:1000;display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--bg);padding:6px 0}
+  .tabs button{font:inherit;font-weight:800;font-size:15px;border:1.5px solid var(--navy);background:var(--card);color:var(--navy);border-radius:10px;padding:10px;min-height:44px;cursor:pointer}
+  .tabs button[aria-selected="true"]{background:var(--navy);color:var(--card)}
+  .tabs button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+  [hidden]{display:none!important}
+
+  /* 지도 */
+  #map{height:58vh;min-height:340px;border-radius:14px;border:1px solid var(--line);overflow:hidden;background:var(--card);z-index:1}
+  .pin{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35);font-family:var(--font)}
+  .pin.opt{background:#fff;color:#1c2b46;border-color:#1c2b46}
+  .pin.call{background:#a3541c}
+  .pin.done{opacity:.45}
+  .stnpin{background:#fff;border:2px solid #1c2b46;color:#1c2b46;font-size:11.5px;font-weight:800;padding:1px 6px;border-radius:6px;white-space:nowrap;font-family:var(--font);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+  .zones{display:flex;gap:6px;flex-wrap:wrap}
+  .zones button{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;min-height:36px;cursor:pointer}
+  .zones button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+  .maplegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--sub)}
+  .maplegend i{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:4px;background:#1c2b46}
+  .maplegend i.o{background:#fff;border:2px solid #1c2b46} .maplegend i.c{background:#a3541c}
+  .maplegend s{display:inline-block;width:20px;border-top:3px dashed #1c2b46;vertical-align:3px;margin-right:4px;text-decoration:none}
+  .maplegend u{display:inline-block;width:20px;border-top:3px solid #1c2b46;vertical-align:3px;margin-right:4px}
+
+  /* 동선 */
+  .route{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+  .route h2{font-size:16px;font-weight:800;margin:0 0 4px}
+  .route .why{font-size:13px;color:var(--sub);margin:0 0 8px}
+  .route ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+  .route li{display:grid;grid-template-columns:28px 1fr;gap:8px;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+  .route li:first-child{border-top:0}
+  .route .k{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;font-weight:800;background:var(--navy);color:var(--card)}
+  .route .k.mv{background:var(--navy-soft);color:var(--navy)}
+  .route .k.opt{background:var(--card);color:var(--navy);border:2px solid var(--navy)}
+  .route .k.call{background:var(--warm);color:var(--card)}
+  .route button.go{all:unset;cursor:pointer;font-weight:800;color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+  .route button.go:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+  .route small{display:block;color:var(--sub);font-size:12.5px}
+
+  /* 카드 아래에서 올라오는 시트 */
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:2000;max-height:78vh;overflow:auto;background:var(--bg);border-radius:16px 16px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.25);
+    padding:8px max(12px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .22s}
+  .sheet.open{transform:none}
+  .sheet .bar0{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 6px}
+  .sheet .bar0 span{font-size:12.5px;color:var(--sub);font-weight:700}
+  .sheet .x{font:inherit;font-weight:800;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 12px;min-height:36px;cursor:pointer}
+  .sheet .card{max-width:640px;margin:0 auto}
+  @media (prefers-reduced-motion:reduce){.sheet{transition:none}}
+
+  /* 노선 띠 (목록) */
   .line{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 12px 10px;overflow-x:auto}
   .stops{display:flex;align-items:flex-start;min-width:520px;position:relative}
   .stops::before{content:"";position:absolute;left:24px;right:24px;top:9px;height:4px;background:var(--navy);border-radius:2px;opacity:.85}
@@ -42,11 +88,11 @@
   .stop span{font-size:11.5px;color:var(--sub);text-align:center;line-height:1.35}
   .legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--sub);margin-top:10px}
 
-  .note{background:var(--navy-soft);border-radius:10px;padding:10px 12px;font-size:13.5px;color:var(--ink)}
+  .note{background:var(--navy-soft);border-radius:10px;padding:10px 12px;font-size:13.5px;color:var(--ink);margin:0}
   .note b{color:var(--navy)}
 
   /* 카드 */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:10px;scroll-margin-top:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:10px;scroll-margin-top:64px}
   .card.done{opacity:.55}
   .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--sub)}
   .no{width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--card);font-weight:800;font-size:13px;display:grid;place-items:center}
@@ -56,35 +102,29 @@
   .t-call{background:var(--warm-soft);color:var(--warm)}
   .t-opt{background:var(--navy-soft);color:var(--sub)}
   .name{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-  .name h2{font-size:19px;font-weight:800;margin:0}
+  .name h2,.name h3{font-size:19px;font-weight:800;margin:0}
   .grade{font-size:12px;font-weight:800;padding:1px 7px;border-radius:5px;border:1.5px solid var(--navy);color:var(--navy)}
   .grade.B{border-color:var(--mute);color:var(--sub)}
   .addr{font-size:13.5px;color:var(--sub);display:flex;gap:6px;align-items:flex-start}
   .addr span{min-width:0}
   .copy{flex:none;font:inherit;font-size:12px;border:1px solid var(--line);background:var(--bg);color:var(--sub);border-radius:6px;padding:1px 7px;cursor:pointer}
-
   .nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
   .nums div{background:var(--bg);border-radius:8px;padding:7px 8px}
   .nums small{display:block;font-size:11.5px;color:var(--mute)}
   .nums b{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
   .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
   .bar span{display:block;height:100%;background:var(--navy)}
-
   .hist{display:flex;flex-direction:column;gap:6px}
   .h{font-size:13.5px;border-radius:8px;padding:7px 10px;display:flex;gap:8px}
   .h em{font-style:normal;font-weight:700;flex:none}
   .h-call{background:var(--warm-soft)} .h-call em{color:var(--warm)}
   .h-none{background:var(--bg);color:var(--sub)}
   .h-mail{background:var(--ok-soft)} .h-mail em{color:var(--ok)}
-
   .q{border-left:3px solid var(--navy);padding:2px 0 2px 10px;font-size:14px}
   .q small{display:block;font-size:11.5px;color:var(--mute);font-weight:700;letter-spacing:.02em}
-
   details{font-size:13.5px;color:var(--sub)}
   summary{cursor:pointer;color:var(--navy);font-weight:700;font-size:13px;padding:2px 0}
   details ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
-  details b{color:var(--ink)}
-
   .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .btn{display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;font-weight:700;font-size:14.5px;border-radius:10px;padding:11px 8px;border:1.5px solid var(--navy);color:var(--navy);background:var(--card);min-height:46px}
   .btn.fill{background:var(--navy);color:var(--card)}
@@ -94,79 +134,117 @@
   .tel .num{font-variant-numeric:tabular-nums;user-select:all}
   .chk{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--sub);cursor:pointer}
   .chk input{width:18px;height:18px;accent-color:var(--navy)}
-  .src{font-size:12px;color:var(--mute);line-height:1.6}
-  @media (prefers-reduced-motion:no-preference){.card{transition:opacity .2s}}
+  .src{font-size:12px;color:var(--mute);line-height:1.6;margin:0}
+  .leaflet-container{font-family:var(--font)}
 </style>
 </head><body>
 
 <div class="wrap">
   <header>
     <h1>1호선 북부 현장방문 · 11/20(금)</h1>
-    <p class="meta">8곳 · 서울에서 가는 순서 · 카드의 지도 버튼을 누르면 네이버·카카오 지도로 이동</p>
+    <p class="meta">8곳 · 먼 곳(동두천역)부터 서울 쪽으로 내려오는 순서</p>
   </header>
 
-  <nav class="line" aria-label="방문 역 순서">
-    <div class="stops" id="stops"></div>
-    <div class="legend"><span>● 굵은 원: 꼭 갈 역</span><span>○ 회색: 시간 되면</span></div>
-  </nav>
+  <div class="tabs" role="tablist" aria-label="보기 방식">
+    <button type="button" role="tab" id="tab-map" aria-selected="true" aria-controls="view-map">지도 보기</button>
+    <button type="button" role="tab" id="tab-list" aria-selected="false" aria-controls="view-list">목록 보기</button>
+  </div>
+
+  <section id="view-map" role="tabpanel" aria-labelledby="tab-map" class="wrap">
+    <div class="zones" id="zones" aria-label="지역 바로가기"></div>
+    <div id="map" aria-label="방문할 요양원 지도. 번호 핀을 누르면 카드가 열립니다"></div>
+    <div class="maplegend"><span><i></i>꼭 갈 곳</span><span><i class="c"></i>아침 전화로 시간 잡기</span><span><i class="o"></i>시간 되면</span><span><u></u>걷기</span><span><s></s>1호선·택시</span></div>
+    <div class="route">
+      <h2>동선</h2>
+      <p class="why">제일 먼 동두천역까지 한 번에 올라간 뒤 서울 쪽으로 내려옵니다. 늦어지면 뒤쪽(덕계·녹양)만 빼고 바로 집으로 가면 됩니다.</p>
+      <ol id="route"></ol>
+    </div>
+  </section>
+
+  <section id="view-list" role="tabpanel" aria-labelledby="tab-list" class="wrap" hidden>
+    <nav class="line" aria-label="방문 역 순서">
+      <div class="stops" id="stops"></div>
+      <div class="legend"><span>● 굵은 원: 꼭 갈 역</span><span>○ 회색: 시간 되면</span></div>
+    </nav>
+    <main class="wrap" id="cards" style="gap:14px"></main>
+  </section>
 
   <p class="note"><b>8곳 모두 요양원채움 메일을 이미 받은 곳</b>입니다. "메일 한 번 드렸던 요양원채움입니다"로 시작하면 됩니다. 신흥신망애는 꼭 <b>동두천역</b>에서 내리세요(동두천중앙역에서 걸으면 1시간).</p>
-
-  <main class="wrap" id="cards" style="gap:14px"></main>
-
-  <p class="src">근거: 광진님 영업 DB + AI 조사(11/10~11), 통화 기록(마지막 11/17), 메일 발송 11/13·11/18, 도보 시간은 카카오맵 도보 큰길우선(11/19). 공개현원은 공단 공개 자료라 지금 실제 인원과 다를 수 있습니다. 원장 이름은 대부분 확인 못 했습니다.</p>
+  <p class="src">근거: 광진님 영업 DB + AI 조사(11/10~11), 통화 기록(마지막 11/17), 메일 발송 11/13·11/18. 역→시설 도보 시간은 카카오맵 도보 측정(11/19), 시설↔시설은 거리로 잡은 대략값. 핀 위치는 카카오맵 도로명 주소 기준. 공개현원은 공단 공개 자료라 지금 실제 인원과 다를 수 있습니다.</p>
 </div>
 
+<div class="sheet" id="sheet" role="dialog" aria-modal="false" aria-label="요양원 카드">
+  <div class="bar0"><span id="sheet-t"></span><button class="x" type="button" id="sheet-x">닫기</button></div>
+  <div id="sheet-body"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
+// 방문 순서대로 (1 = 제일 먼 동두천역). 좌표: 카카오맵 도로명 주소 검색 (11/20)
 const D=[
- {id:1,stn:"녹양역",walk:"16분 · 1.0km",tag:"opt",tagT:"시간 되면",name:"행복한요양원 녹양역점",q:"행복한요양원 녹양역점",g:"A",addr:"경기도 양주시 외미로20번길 34 (남방동)",tel:"031-856-8090",cap:99,cur:52,staff:"29명 (최근 6개월 입사 26)",since:"2026.04 지정",
-  call:null,mail:"11/13",
-  ask:"블로그에 노원·은평·도봉 쪽 지역명을 붙인 글이 많던데, 그쪽 보호자분들 문의도 실제로 들어오고 있나요?",
-  more:["지정은 2026.04인데 홈페이지에 '13년 전통' 문구 → 재지정·승계 가능성","대표 박준호(홈페이지 하단) · 원장 이름 모름","잘함: 블로그 거의 매일, 홈페이지 사진 39장+·영상투어·카톡 상담","부족: 플레이스 방문자 리뷰 3건, 사진 탭 없음, 홈페이지 비용표 없음","의정부 바로 옆이라 광진님 범위 확인 먼저"]},
- {id:2,stn:"덕계역",walk:"27분 · 1.6km",tag:"call",tagT:"아침 전화로 시간 잡기",name:"기쁨요양원",q:"기쁨요양원 양주 덕계동",g:"A",addr:"경기도 양주시 평화로1429번길 89-22 (덕계동)",tel:"031-951-9293",cap:42,cur:14,staff:"8명",since:"2025.05 지정",
-  call:"11/17 · 원장님과 대화해 본다고 하심. 번호 남겼고 업체 내용 정리해서 전달",mail:"11/13",
-  ask:"블로그에 남양주·파주 같은 지역 이름을 붙인 글도 많이 올리시던데, 실제로는 어느 지역 보호자분들이 주로 문의하시나요?",
-  more:["양주역에서 가면 걸어서 1시간 29분 → 꼭 덕계역","잘함: 7월부터 4개월에 블로그 50편, 식단·프로그램 고르게","부족: 홈페이지 없음, 플레이스 방문자 리뷰·가격 없음, 글 제목 지역명이 덕계동이 아닌 곳","플레이스 번호는 0507 안심번호, 대표번호는 031-951-9293"]},
- {id:3,stn:"덕계역",walk:"23분 · 1.5km",tag:"opt",tagT:"시간 되면",name:"해와달요양원",q:"해와달요양원 양주",g:"B",addr:"경기도 양주시 평화로 1426 6·7층 (덕계동, 영토빌딩)",tel:"031-864-0011",cap:49,cur:39,staff:"19명 (최근 6개월 입사 15)",since:"2023.12 지정",
+ {id:1,stn:"동두천역",walk:"13분 · 706m",tag:"must",tagT:"꼭",name:"신흥신망애요양원",q:"신흥신망애요양원 동두천",g:"A",addr:"경기도 동두천시 강변로702번길 13-11 (동두천동)",tel:"031-861-5500",cap:90,cur:26,staff:"15명 (최근 6개월 입사 0)",since:"2008.06 지정 (18년 차)",ll:[37.93013,127.05034],
+  call:"11/11 · 직원 통화 — \"이메일 보내드려도 될까요?\"",mail:"11/13",
+  ask:"블로그에 매달 건강 정보를 꾸준히 올리시던데, 보호자분들이 블로그나 지도 검색을 보고 연락 주시는 경우도 있나요?",
+  more:["오늘 코스에서 빈자리 추정이 가장 큼(58)","동두천중앙역에서 걸으면 1시간 3분 → 꼭 동두천역","카카오맵엔 '신흥신망애복지원'으로 나옴 (같은 주소에 신흥전문요양원·안흥교회)","플레이스에 사진·영업시간 없음, 홈페이지 없음","블로그는 2025.05부터 꾸준(소식지·행사), 최근 글은 일반 건강정보"]},
+ {id:2,stn:"동두천중앙역",walk:"14분 · 921m",tag:"must",tagT:"꼭",name:"주사랑요양원",q:"주사랑요양원 동두천",g:"B",addr:"경기도 동두천시 중앙로 292 2~6층 (생연동, 동성빌딩)",tel:"031-865-0100",cap:91,cur:53,staff:"28명",since:"2019.05 지정",ll:[37.90752,127.05471],
   call:null,mail:"11/18",ask:null,
-  more:["AI 조사 안 한 곳(B등급) → 원장님 계신지·지금 인원만 확인","블로그: blog.naver.com/sunandmoonursinghome"]},
- {id:4,stn:"지행역",walk:"3분 · 154m",tag:"must",tagT:"꼭",name:"늘사랑노인전문요양원",q:"늘사랑노인전문요양원 동두천",g:"A",addr:"경기도 동두천시 동두천로 119 402호 (지행동, 지행역프라자)",tel:"031-872-1234",cap:27,cur:10,staff:"5명",since:"2021.07 지정",
-  call:null,mail:"11/13",
-  ask:"네이버 지도에 걸려 있는 옛 홈페이지가 이용 중지 화면으로 뜨던데, 알고 계셨나요?",
-  more:["플레이스에 걸린 옛 홈페이지(lovehome.onmam.com)가 10월부터 이용 중지 화면","블로그는 1년에 1~3편","잘함: 블로그·인스타·ok114까지 플레이스에 연결","기독교 정체성('예배를 드리며') · 원장 이름 모름 · 플레이스엔 '4층'"]},
- {id:5,stn:"지행역",walk:"4분",tag:"must",tagT:"꼭",name:"봄나라요양원",q:"봄나라요양원 동두천",g:"B",addr:"경기도 동두천시 지행로 64 (지행동, 씨티타워 7층)",tel:"031-866-7727",cap:40,cur:25,staff:"12명",since:"2010.11 지정 (16년 차)",
-  call:null,mail:"11/18",ask:null,
-  more:["AI 조사 안 한 곳(B등급) → 원장님 계신지·지금 인원만 확인","홈페이지: www.bomnara.co.kr"]},
- {id:6,stn:"동두천중앙역",walk:"8분 · 532m",tag:"must",tagT:"꼭",name:"현대전문요양원",q:"현대전문요양원 동두천",g:"A",addr:"경기도 동두천시 정장로35번길 20 (생연동)",tel:"031-862-8286",cap:29,cur:14,staff:"7명 (최근 6개월 입사 0)",since:"2012.06 지정",
+  more:["AI 조사 안 한 곳(B등급) → 원장님 계신지·지금 인원만 확인","B등급 중 빈자리 추정이 큰 편(32)","홈페이지: www.주사랑요양원.kr"]},
+ {id:3,stn:"동두천중앙역",walk:"8분 · 532m",tag:"must",tagT:"꼭",name:"현대전문요양원",q:"현대전문요양원 동두천",g:"A",addr:"경기도 동두천시 정장로35번길 20 (생연동)",tel:"031-862-8286",cap:29,cur:14,staff:"7명 (최근 6개월 입사 0)",since:"2012.06 지정",ll:[37.90505,127.05506],
   call:null,mail:"11/13",
   ask:"블로그에 10월부터 어르신 활동 글을 다시 올리기 시작하신 걸 봤는데, 다시 시작하신 계기가 있으셨나요?",
   more:["블로그 2023-06 ~ 2026-10 공백 후 재개","플레이스 사진 2장뿐, 홈페이지가 다음카페라 입소·비용 정보 확인 어려움","원장 이름 모름"]},
- {id:7,stn:"동두천중앙역",walk:"14분 · 921m",tag:"must",tagT:"꼭",name:"주사랑요양원",q:"주사랑요양원 동두천",g:"B",addr:"경기도 동두천시 중앙로 292 2~6층 (생연동, 동성빌딩)",tel:"031-865-0100",cap:91,cur:53,staff:"28명",since:"2019.05 지정",
+ {id:4,stn:"지행역",walk:"3분 · 154m",tag:"must",tagT:"꼭",name:"늘사랑노인전문요양원",q:"늘사랑노인전문요양원 동두천",g:"A",addr:"경기도 동두천시 동두천로 119 402호 (지행동, 지행역프라자)",tel:"031-872-1234",cap:27,cur:10,staff:"5명",since:"2021.07 지정",ll:[37.89207,127.05480],
+  call:null,mail:"11/13",
+  ask:"네이버 지도에 걸려 있는 옛 홈페이지가 이용 중지 화면으로 뜨던데, 알고 계셨나요?",
+  more:["플레이스에 걸린 옛 홈페이지(lovehome.onmam.com)가 10월부터 이용 중지 화면","블로그는 1년에 1~3편","잘함: 블로그·인스타·ok114까지 플레이스에 연결","기독교 정체성('예배를 드리며') · 원장 이름 모름 · 플레이스엔 '4층'"]},
+ {id:5,stn:"지행역",walk:"4분",tag:"must",tagT:"꼭",name:"봄나라요양원",q:"봄나라요양원 동두천",g:"B",addr:"경기도 동두천시 지행로 64 (지행동, 씨티타워 7층)",tel:"031-866-7727",cap:40,cur:25,staff:"12명",since:"2010.11 지정 (16년 차)",ll:[37.89206,127.05418],
   call:null,mail:"11/18",ask:null,
-  more:["AI 조사 안 한 곳(B등급) → 원장님 계신지·지금 인원만 확인","B등급 중 빈자리 추정이 큰 편(32)","홈페이지: www.주사랑요양원.kr"]},
- {id:8,stn:"동두천역",walk:"13분 · 706m",tag:"must",tagT:"꼭",name:"신흥신망애요양원",q:"신흥신망애요양원 동두천",g:"A",addr:"경기도 동두천시 강변로702번길 13-11 (동두천동)",tel:"031-861-5500",cap:90,cur:26,staff:"15명 (최근 6개월 입사 0)",since:"2008.06 지정 (18년 차)",
-  call:"11/11 · 직원 통화 — \"이메일 보내드려도 될까요?\"",mail:"11/13",
-  ask:"블로그에 매달 건강 정보를 꾸준히 올리시던데, 보호자분들이 블로그나 지도 검색을 보고 연락 주시는 경우도 있나요?",
-  more:["오늘 코스에서 빈자리 추정이 가장 큼(58)","동두천중앙역에서 걸으면 1시간 3분 → 꼭 동두천역","플레이스에 사진·영업시간 없음, 홈페이지 없음","블로그는 2025.05부터 꾸준(소식지·행사), 최근 글은 일반 건강정보"]}
+  more:["늘사랑과 바로 옆 건물(약 50m)","AI 조사 안 한 곳(B등급) → 원장님 계신지·지금 인원만 확인","홈페이지: www.bomnara.co.kr"]},
+ {id:6,stn:"덕계역",walk:"23분 · 1.5km",tag:"opt",tagT:"시간 되면",name:"해와달요양원",q:"해와달요양원 양주",g:"B",addr:"경기도 양주시 평화로 1426 6·7층 (덕계동, 영토빌딩)",tel:"031-864-0011",cap:49,cur:39,staff:"19명 (최근 6개월 입사 15)",since:"2023.12 지정",ll:[37.81812,127.04627],
+  call:null,mail:"11/18",ask:null,
+  more:["기쁨요양원과 약 540m — 기쁨 가는 길에 들르기","AI 조사 안 한 곳(B등급) → 원장님 계신지·지금 인원만 확인","블로그: blog.naver.com/sunandmoonursinghome"]},
+ {id:7,stn:"덕계역",walk:"27분 · 1.6km",tag:"call",tagT:"아침 전화로 시간 잡기",name:"기쁨요양원",q:"기쁨요양원 양주 덕계동",g:"A",addr:"경기도 양주시 평화로1429번길 89-22 (덕계동)",tel:"031-951-9293",cap:42,cur:14,staff:"8명",since:"2025.05 지정",ll:[37.82205,127.04266],
+  call:"11/17 · 원장님과 대화해 본다고 하심. 번호 남겼고 업체 내용 정리해서 전달",mail:"11/13",
+  ask:"블로그에 남양주·파주 같은 지역 이름을 붙인 글도 많이 올리시던데, 실제로는 어느 지역 보호자분들이 주로 문의하시나요?",
+  more:["원장님 시간이 오전으로 잡히면 순서를 바꿔 먼저 들르기 (지도 아래 동선 참고)","양주역에서 가면 걸어서 1시간 29분 → 꼭 덕계역","잘함: 7월부터 4개월에 블로그 50편, 식단·프로그램 고르게","부족: 홈페이지 없음, 플레이스 방문자 리뷰·가격 없음, 글 제목 지역명이 덕계동이 아닌 곳","카카오맵 번호는 010-8986-6978, DB 대표번호는 031-951-9293"]},
+ {id:8,stn:"녹양역",walk:"16분 · 1.0km",tag:"opt",tagT:"시간 되면",name:"행복한요양원 녹양역점",q:"행복한요양원 녹양역점",g:"A",addr:"경기도 양주시 외미로20번길 34 (남방동)",tel:"031-856-8090",cap:99,cur:52,staff:"29명 (최근 6개월 입사 26)",since:"2026.04 지정",ll:[37.76763,127.04364],
+  call:null,mail:"11/13",
+  ask:"블로그에 노원·은평·도봉 쪽 지역명을 붙인 글이 많던데, 그쪽 보호자분들 문의도 실제로 들어오고 있나요?",
+  more:["의정부 바로 옆이라 광진님 범위 확인 먼저","지정은 2026.04인데 홈페이지에 '13년 전통' 문구 → 재지정·승계 가능성","대표 박준호(홈페이지 하단) · 원장 이름 모름","잘함: 블로그 거의 매일, 홈페이지 사진 39장+·영상투어·카톡 상담","부족: 플레이스 방문자 리뷰 3건, 사진 탭 없음, 홈페이지 비용표 없음"]}
+];
+const ST={"동두천역":[37.92761,127.05493],"보산역":[37.91414,127.05718],"동두천중앙역":[37.90178,127.05642],"지행역":[37.89234,127.05579],"덕정역":[37.84319,127.06156],"덕계역":[37.81875,127.05669],"양주역":[37.77414,127.04472],"녹양역":[37.75939,127.04228]};
+
+// 동선: id가 있으면 방문, 없으면 이동
+const R=[
+ {mv:1,t:"1호선 타고 동두천역에서 내리기",s:"양주행은 동두천까지 안 갑니다 → 동두천·소요산행 타기"},
+ {id:1,s:"동두천역에서 걸어서 13분"},
+ {mv:1,t:"주사랑까지 약 2.5km",s:"택시가 제일 빠름. 아니면 동두천역 → 1호선 2정거장 → 동두천중앙역에서 걸어서 14분"},
+ {id:2,s:""},
+ {id:3,s:"주사랑에서 걸어서 약 5분 (약 280m)"},
+ {mv:1,t:"지행역 쪽으로",s:"걸어서 약 25분(1.4km) 또는 동두천중앙역 → 1호선 1정거장 → 지행역"},
+ {id:4,s:"지행역에서 걸어서 3분"},
+ {id:5,s:"늘사랑 바로 옆 (약 50m)"},
+ {mv:1,t:"지행역 → 1호선 2정거장 → 덕계역",s:"여기서 늦었으면 그대로 서울로 가도 됨"},
+ {id:6,s:"덕계역에서 걸어서 23분 · 기쁨 가는 길"},
+ {id:7,s:"해와달에서 약 10분 · 아침 통화로 원장님 시간 잡혔을 때. 오전으로 잡히면 덕계를 맨 먼저 들르기"},
+ {mv:1,t:"덕계역 → 1호선 2정거장 → 녹양역",s:"기쁨에서 덕계역까지 걸어서 27분"},
+ {id:8,s:"녹양역에서 걸어서 16분 · 광진님 범위 확인 먼저"}
 ];
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const KEY="dd1120-done";
+const KEY="dd1120-done-v2";
 let done={};try{done=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){done={}}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}};
+const byId=id=>D.find(d=>d.id==id);
 
-// 노선 띠
-const stations=[["녹양역",[1],true],["덕계역",[2,3],true],["지행역",[4,5],false],["동두천중앙역",[6,7],false],["동두천역",[8],false]];
-document.getElementById("stops").innerHTML=stations.map(([s,ids,skip])=>
- `<a class="stop${skip?" skip":""}" href="#c${ids[0]}"><i></i><b>${s.replace("역","")}</b><span>${ids.map(i=>D[i-1].name.replace("노인전문","").replace(" 녹양역점","")).join("<br>")}</span></a>`).join("");
-
-document.getElementById("cards").innerHTML=D.map(d=>{
+function card(d,inSheet){
  const vac=d.cap-d.cur, pct=Math.round(d.cur/d.cap*100);
  const naver="https://map.naver.com/p/search/"+encodeURIComponent(d.q);
  const kakao="https://map.kakao.com/link/search/"+encodeURIComponent(d.q);
- return `<article class="card${done[d.id]?" done":""}" id="c${d.id}">
+ const H=inSheet?"h3":"h2";
+ return `<article class="card${done[d.id]?" done":""}" ${inSheet?"":`id="c${d.id}"`} data-card="${d.id}">
   <div class="top"><span class="no">${d.id}</span><span class="stn">${d.stn}</span><span>걸어서 ${d.walk}</span><span class="tag t-${d.tag}">${d.tagT}</span></div>
-  <div class="name"><h2>${esc(d.name)}</h2><span class="grade ${d.g}">${d.g}등급</span></div>
+  <div class="name"><${H}>${esc(d.name)}</${H}><span class="grade ${d.g}">${d.g}등급</span></div>
   <div class="addr"><span>${esc(d.addr)}</span><button class="copy" type="button" data-copy="${esc(d.addr)}">복사</button></div>
   <div class="nums">
    <div><small>정원 / 공개현원</small><b>${d.cap} / ${d.cur}</b></div>
@@ -179,16 +257,84 @@ document.getElementById("cards").innerHTML=D.map(d=>{
    <div class="h h-mail"><em>메일</em><span>${d.mail} 요양원채움 메일 발송함</span></div>
   </div>
   ${d.ask?`<div class="q"><small>첫 질문</small>“${esc(d.ask)}”</div>`:""}
-  <details><summary>더 보기 · ${esc(d.since)}</summary><ul>${d.more.map(m=>`<li>${esc(m)}</li>`).join("")}</ul></details>
+  <details${inSheet?" open":""}><summary>더 보기 · ${esc(d.since)}</summary><ul>${d.more.map(m=>`<li>${esc(m)}</li>`).join("")}</ul></details>
   <div class="btns">
    <a class="btn fill" href="${naver}" target="_blank" rel="noopener">네이버 지도</a>
    <a class="btn" href="${kakao}" target="_blank" rel="noopener">카카오맵</a>
    <div class="tel"><a class="btn" href="tel:${d.tel.replace(/-/g,"")}">전화 <span class="num">${d.tel}</span></a><button class="copy" type="button" data-copy="${d.tel}">번호 복사</button></div>
   </div>
-  <label class="chk"><input type="checkbox" id="done-${d.id}" data-id="${d.id}" ${done[d.id]?"checked":""}> 다녀옴</label>
- </article>`}).join("");
+  <label class="chk"><input type="checkbox" data-id="${d.id}" ${done[d.id]?"checked":""}> 다녀옴</label>
+ </article>`;
+}
 
+// 목록 보기
+const stations=[["동두천역",[1],false],["동두천중앙역",[2,3],false],["지행역",[4,5],false],["덕계역",[6,7],true],["녹양역",[8],true]];
+document.getElementById("stops").innerHTML=stations.map(([s,ids,skip])=>
+ `<a class="stop${skip?" skip":""}" href="#c${ids[0]}"><i></i><b>${s.replace("역","")}</b><span>${ids.map(i=>byId(i).name.replace("노인전문","").replace(" 녹양역점","")).join("<br>")}</span></a>`).join("");
+document.getElementById("cards").innerHTML=D.map(d=>card(d,false)).join("");
+
+// 동선 목록
+document.getElementById("route").innerHTML=R.map(r=>{
+ if(r.mv) return `<li><span class="k mv" aria-hidden="true">→</span><div>${esc(r.t)}<small>${esc(r.s)}</small></div></li>`;
+ const d=byId(r.id);
+ return `<li><span class="k ${d.tag==="must"?"":d.tag}">${d.id}</span><div><button type="button" class="go" data-open="${d.id}">${esc(d.name)}</button> <span style="color:var(--sub);font-size:12.5px">${d.g}등급 · 빈자리 ${d.cap-d.cur}</span><small>${esc(r.s)}</small></div></li>`;
+}).join("");
+
+// 시트
+const sheet=document.getElementById("sheet"), sbody=document.getElementById("sheet-body");
+let lastFocus=null;
+function openSheet(id){
+ const d=byId(id); lastFocus=document.activeElement;
+ document.getElementById("sheet-t").textContent=`${d.id}번 · ${d.stn}`;
+ sbody.innerHTML=card(d,true); sheet.classList.add("open"); sheet.scrollTop=0;
+ document.getElementById("sheet-x").focus({preventScroll:true});
+ if(window.map&&markers[id]) map.panTo(markers[id].getLatLng(),{animate:true});
+}
+function closeSheet(){sheet.classList.remove("open"); if(lastFocus) lastFocus.focus({preventScroll:true})}
+document.getElementById("sheet-x").addEventListener("click",closeSheet);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&sheet.classList.contains("open")) closeSheet()});
+
+// 탭
+const tabs={map:document.getElementById("tab-map"),list:document.getElementById("tab-list")};
+function show(v){
+ for(const k in tabs){const on=k===v; tabs[k].setAttribute("aria-selected",on); document.getElementById("view-"+k).hidden=!on}
+ if(v==="map"&&window.map) setTimeout(()=>map.invalidateSize(),50); else closeSheet();
+ try{localStorage.setItem("dd1120-view",v)}catch(e){}
+}
+tabs.map.onclick=()=>show("map"); tabs.list.onclick=()=>show("list");
+
+// 지도
+const markers={};
+if(window.L){
+ window.map=L.map("map",{zoomControl:true,attributionControl:true,tap:true});
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+ const navy="#1c2b46";
+ // 1호선 (역 순서대로 점선)
+ L.polyline(["동두천역","보산역","동두천중앙역","지행역","덕정역","덕계역","양주역","녹양역"].map(s=>ST[s]),{color:navy,weight:3,opacity:.35,dashArray:"6 7"}).addTo(map);
+ // 걷는 구간 (역 → 시설)
+ const walk=[["동두천역",1],["동두천중앙역",2],[2,3],["지행역",4],[4,5],["덕계역",6],[6,7],[7,"덕계역"],["녹양역",8]];
+ const pt=x=>typeof x==="string"?ST[x]:byId(x).ll;
+ walk.forEach(([a,b])=>L.polyline([pt(a),pt(b)],{color:navy,weight:4,opacity:.8}).addTo(map));
+ L.polyline([byId(1).ll,byId(2).ll],{color:"#a3541c",weight:3,opacity:.8,dashArray:"2 7"}).addTo(map).bindTooltip("택시 또는 1호선");
+ Object.entries(ST).forEach(([s,ll])=>{if(["보산역","덕정역","양주역"].includes(s)) return;
+  L.marker(ll,{icon:L.divIcon({className:"",html:`<div class="stnpin">${s}</div>`,iconSize:null,iconAnchor:[0,0]}),keyboard:false,interactive:false}).addTo(map)});
+ D.forEach(d=>{
+  const m=L.marker(d.ll,{title:`${d.id}. ${d.name}`,alt:`${d.id}. ${d.name}`,icon:L.divIcon({className:"",html:`<div class="pin ${d.tag==="must"?"":d.tag}${done[d.id]?" done":""}">${d.id}</div>`,iconSize:[30,30],iconAnchor:[d.id==4?31:d.id==5?-1:15,15]})}).addTo(map);
+  m.on("click",()=>openSheet(d.id)); markers[d.id]=m;
+ });
+ const Z={"전체":[...D.map(d=>d.ll),ST["동두천역"],ST["녹양역"]],"동두천 (1~5)":[...[1,2,3,4,5].map(i=>byId(i).ll),ST["동두천역"],ST["지행역"]],"덕계 (6·7)":[byId(6).ll,byId(7).ll,ST["덕계역"]],"녹양 (8)":[byId(8).ll,ST["녹양역"]]};
+ const zone=k=>map.fitBounds(L.latLngBounds(Z[k]),{padding:[36,36],maxZoom:17});
+ document.getElementById("zones").innerHTML=Object.keys(Z).map(k=>`<button type="button" data-zone="${k}">${k}</button>`).join("");
+ document.getElementById("zones").addEventListener("click",e=>{const b=e.target.closest("[data-zone]"); if(b) zone(b.dataset.zone)});
+ zone("동두천 (1~5)");
+}else{
+ document.getElementById("map").innerHTML='<p style="padding:16px;color:var(--sub)">지도를 불러오지 못했습니다. 아래 동선이나 목록 보기를 이용하세요.</p>';
+}
+
+// 클릭·체크
 document.addEventListener("click",e=>{
+ const o=e.target.closest("[data-open]"); if(o){openSheet(o.dataset.open);return}
  const b=e.target.closest("[data-copy]"); if(!b) return;
  const t=b.dataset.copy, old=b.textContent;
  navigator.clipboard.writeText(t).then(()=>{b.textContent="복사됨";setTimeout(()=>b.textContent=old,1200)})
@@ -197,8 +343,11 @@ document.addEventListener("click",e=>{
 document.addEventListener("change",e=>{
  const c=e.target.closest("input[data-id]"); if(!c) return;
  const id=c.dataset.id; if(c.checked) done[id]=1; else delete done[id]; save();
- document.getElementById("c"+id).classList.toggle("done",c.checked);
+ document.querySelectorAll(`[data-card="${id}"]`).forEach(el=>el.classList.toggle("done",c.checked));
+ document.querySelectorAll(`input[data-id="${id}"]`).forEach(el=>el.checked=c.checked);
+ const p=markers[id]&&markers[id].getElement()&&markers[id].getElement().querySelector(".pin"); if(p) p.classList.toggle("done",c.checked);
 });
+let v0="map";try{v0=localStorage.getItem("dd1120-view")||"map"}catch(e){}
+show(v0==="list"?"list":"map");
 </script>
-
 </body></html>
