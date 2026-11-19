@@ -65,11 +65,13 @@
   .route .k.call{background:var(--warm);color:var(--card)}
   .route button.go{all:unset;cursor:pointer;font-weight:800;color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
   .route button.go:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+  .route .tm{display:inline-block;min-width:52px;font-variant-numeric:tabular-nums;font-weight:800;color:var(--navy);margin-right:4px}
   .route small{display:block;color:var(--sub);font-size:12.5px}
 
   /* 카드 아래에서 올라오는 시트 */
   .sheet{position:fixed;left:0;right:0;bottom:0;z-index:2000;max-height:78vh;overflow:auto;background:var(--bg);border-radius:16px 16px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.25);
     padding:8px max(12px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .22s}
+  .sheet:not(.open){visibility:hidden;transition:transform .22s,visibility 0s .22s}
   .sheet.open{transform:none}
   .sheet .bar0{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto 6px}
   .sheet .bar0 span{font-size:12.5px;color:var(--sub);font-weight:700}
@@ -156,7 +158,7 @@
     <div class="maplegend"><span><i></i>꼭 갈 곳</span><span><i class="c"></i>아침 전화로 시간 잡기</span><span><i class="o"></i>시간 되면</span><span><u></u>걷기</span><span><s></s>1호선·택시</span></div>
     <div class="route">
       <h2>동선</h2>
-      <p class="why">제일 먼 동두천역까지 한 번에 올라간 뒤 서울 쪽으로 내려옵니다. 늦어지면 뒤쪽(덕계·녹양)만 빼고 바로 집으로 가면 됩니다.</p>
+      <p class="why">방문하기 좋은 시간은 <b>오전 10~11시</b>, <b>오후 1~4시</b>입니다(점심·저녁 시간은 피하기). 제일 먼 동두천역까지 올라간 뒤 서울 쪽으로 내려옵니다. 시간은 한 곳에 20분 안팎 잡은 예상이라 밀리면 뒤쪽(덕계·녹양)부터 빼면 됩니다.</p>
       <ol id="route"></ol>
     </div>
   </section>
@@ -216,19 +218,19 @@ const ST={"동두천역":[37.92761,127.05493],"보산역":[37.91414,127.05718],"
 
 // 동선: id가 있으면 방문, 없으면 이동
 const R=[
- {mv:1,t:"1호선 타고 동두천역에서 내리기",s:"양주행은 동두천까지 안 갑니다 → 동두천·소요산행 타기"},
- {id:1,s:"동두천역에서 걸어서 13분"},
- {mv:1,t:"주사랑까지 약 2.5km",s:"택시가 제일 빠름. 아니면 동두천역 → 1호선 2정거장 → 동두천중앙역에서 걸어서 14분"},
- {id:2,s:""},
- {id:3,s:"주사랑에서 걸어서 약 5분 (약 280m)"},
- {mv:1,t:"지행역 쪽으로",s:"걸어서 약 25분(1.4km) 또는 동두천중앙역 → 1호선 1정거장 → 지행역"},
- {id:4,s:"지행역에서 걸어서 3분"},
- {id:5,s:"늘사랑 바로 옆 (약 50m)"},
- {mv:1,t:"지행역 → 1호선 2정거장 → 덕계역",s:"여기서 늦었으면 그대로 서울로 가도 됨"},
- {id:6,s:"덕계역에서 걸어서 23분 · 기쁨 가는 길"},
- {id:7,s:"해와달에서 약 10분 · 아침 통화로 원장님 시간 잡혔을 때. 오전으로 잡히면 덕계를 맨 먼저 들르기"},
- {mv:1,t:"덕계역 → 1호선 2정거장 → 녹양역",s:"기쁨에서 덕계역까지 걸어서 27분"},
- {id:8,s:"녹양역에서 걸어서 16분 · 광진님 범위 확인 먼저"}
+ {mv:1,tm:"9:45",t:"1호선 동두천역 도착",s:"양주행은 동두천까지 안 갑니다 → 동두천·소요산행 타기"},
+ {id:1,tm:"10:00",s:"동두천역에서 걸어서 13분 · 20분 안팎으로"},
+ {mv:1,tm:"10:25",t:"택시로 주사랑까지 (약 2.5km)",s:"택시가 안 잡히면 동두천역 → 1호선 2정거장 → 동두천중앙역에서 걸어서 14분 (시간 더 걸림)"},
+ {id:2,tm:"10:35",s:""},
+ {id:3,tm:"11:00",s:"주사랑에서 걸어서 약 5분 · 11시 반 전에 나오기"},
+ {mv:1,tm:"11:30",t:"점심 · 방문 안 함",s:"지행역 쪽으로 걸어서 약 25분(1.4km) 또는 1호선 1정거장 → 지행역 근처에서 점심"},
+ {id:4,tm:"13:00",s:"지행역에서 걸어서 3분"},
+ {id:5,tm:"13:30",s:"늘사랑 바로 옆 (약 50m)"},
+ {mv:1,tm:"14:00",t:"지행역 → 1호선 2정거장 → 덕계역",s:"열차 간격이 길 수 있으니 카카오맵으로 다음 열차 확인 · 여기서 늦었으면 서울로"},
+ {id:6,tm:"14:30",s:"덕계역에서 걸어서 23분 · 기쁨 가는 길"},
+ {id:7,tm:"15:00",s:"해와달에서 약 10분 · 아침 통화로 원장님 시간 잡기 (오전으로 잡히면 덕계를 맨 먼저)"},
+ {mv:1,tm:"15:30",t:"덕계역 → 1호선 2정거장 → 녹양역",s:"기쁨에서 덕계역까지 걸어서 27분"},
+ {id:8,tm:"16:20쯤",s:"4시를 넘겨 도착 → 오늘은 빼고 다음에 가는 게 나음 · 광진님 범위 확인 먼저"}
 ];
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -275,9 +277,9 @@ document.getElementById("cards").innerHTML=D.map(d=>card(d,false)).join("");
 
 // 동선 목록
 document.getElementById("route").innerHTML=R.map(r=>{
- if(r.mv) return `<li><span class="k mv" aria-hidden="true">→</span><div>${esc(r.t)}<small>${esc(r.s)}</small></div></li>`;
+ if(r.mv) return `<li><span class="k mv" aria-hidden="true">→</span><div><b class="tm">${r.tm}</b>${esc(r.t)}<small>${esc(r.s)}</small></div></li>`;
  const d=byId(r.id);
- return `<li><span class="k ${d.tag==="must"?"":d.tag}">${d.id}</span><div><button type="button" class="go" data-open="${d.id}">${esc(d.name)}</button> <span style="color:var(--sub);font-size:12.5px">${d.g}등급 · 빈자리 ${d.cap-d.cur}</span><small>${esc(r.s)}</small></div></li>`;
+ return `<li><span class="k ${d.tag==="must"?"":d.tag}">${d.id}</span><div><b class="tm">${r.tm}</b><button type="button" class="go" data-open="${d.id}">${esc(d.name)}</button> <span style="color:var(--sub);font-size:12.5px">${d.g}등급 · 빈자리 ${d.cap-d.cur}</span><small>${esc(r.s)}</small></div></li>`;
 }).join("");
 
 // 시트
