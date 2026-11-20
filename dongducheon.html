@@ -131,6 +131,9 @@
   .btn{display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;font-weight:700;font-size:14.5px;border-radius:10px;padding:11px 8px;border:1.5px solid var(--navy);color:var(--navy);background:var(--card);min-height:46px}
   .btn.fill{background:var(--navy);color:var(--card)}
   .btn:focus-visible,.copy:focus-visible,.chk:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+  .links{grid-column:1 / -1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .btn.lk{font-size:13.5px;padding:9px 4px;min-height:42px;text-align:center;line-height:1.25}
+  .btn.off{border-color:var(--line);color:var(--mute);background:var(--bg);font-weight:600}
   .tel{grid-column:1 / -1;display:flex;gap:8px;align-items:center}
   .tel .btn{flex:1}
   .tel .num{font-variant-numeric:tabular-nums;user-select:all}
@@ -214,6 +217,23 @@ const D=[
   ask:"블로그에 노원·은평·도봉 쪽 지역명을 붙인 글이 많던데, 그쪽 보호자분들 문의도 실제로 들어오고 있나요?",
   more:["의정부 바로 옆이라 광진님 범위 확인 먼저","지정은 2026.04인데 홈페이지에 '13년 전통' 문구 → 재지정·승계 가능성","대표 박준호(홈페이지 하단) · 원장 이름 모름","잘함: 블로그 거의 매일, 홈페이지 사진 39장+·영상투어·카톡 상담","부족: 플레이스 방문자 리뷰 3건, 사진 탭 없음, 홈페이지 비용표 없음"]}
 ];
+// 홈페이지·블로그·플레이스 링크 (DB·AI 조사 11/10~11). 문자열=주소, null=조사했고 없음, 키 없음=조사 안 함(미확인)
+const LK={
+ 1:{hp:null,bl:"https://blog.naver.com/flovehope",pl:"https://m.place.naver.com/place/12158777/home"},
+ 2:{hp:"http://www.주사랑요양원.kr"},
+ 3:{hp:"http://cafe.daum.net/Hdyoyang",hpT:"카페",bl:"https://blog.naver.com/khg970970",pl:"https://m.place.naver.com/place/35324436/home"},
+ 4:{hp:"http://lovehome.onmam.com",hpT:"홈페이지(이용 중지)",bl:"https://blog.naver.com/8721234",pl:"https://m.place.naver.com/place/1490701450/home"},
+ 5:{hp:"http://www.bomnara.co.kr"},
+ 6:{bl:"https://blog.naver.com/sunandmoonursinghome"},
+ 7:{hp:null,bl:"https://blog.naver.com/joynursinghome",pl:"https://m.place.naver.com/place/2037579183/home"},
+ 8:{hp:"http://www.행복한요양원녹양역.com",bl:"https://blog.naver.com/happy_8090",pl:"https://m.place.naver.com/place/2068948383/home"}
+};
+const lkBtn=(u,label,off)=>{
+ if(u) return `<a class="btn lk" href="${esc(u)}" target="_blank" rel="noopener">${label}</a>`;
+ return `<span class="btn lk off">${label} ${u===null?"없음":"미확인"}</span>`;
+};
+const links=id=>{const l=LK[id]||{};
+ return `<div class="links">${lkBtn(l.hp,l.hpT||"홈페이지")}${lkBtn(l.bl,"블로그")}${lkBtn(l.pl,"플레이스")}</div>`};
 const ST={"동두천역":[37.92761,127.05493],"보산역":[37.91414,127.05718],"동두천중앙역":[37.90178,127.05642],"지행역":[37.89234,127.05579],"덕정역":[37.84319,127.06156],"덕계역":[37.81875,127.05669],"양주역":[37.77414,127.04472],"녹양역":[37.75939,127.04228]};
 
 // 동선: id가 있으면 방문, 없으면 이동
@@ -263,6 +283,7 @@ function card(d,inSheet){
   <div class="btns">
    <a class="btn fill" href="${naver}" target="_blank" rel="noopener">네이버 지도</a>
    <a class="btn" href="${kakao}" target="_blank" rel="noopener">카카오맵</a>
+   ${links(d.id)}
    <div class="tel"><a class="btn" href="tel:${d.tel.replace(/-/g,"")}">전화 <span class="num">${d.tel}</span></a><button class="copy" type="button" data-copy="${d.tel}">번호 복사</button></div>
   </div>
   <label class="chk"><input type="checkbox" data-id="${d.id}" ${done[d.id]?"checked":""}> 다녀옴</label>
